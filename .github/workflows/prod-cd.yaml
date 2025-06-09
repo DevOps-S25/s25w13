@@ -1,0 +1,28 @@
+name: wf-prod-cd
+on:
+  push:
+    branches:
+      - production
+jobs:
+  prod-build-job:
+    environment:
+      name: "production-env"
+    permissions:
+      id-token: write
+      pages: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Build Wesbite
+        run:  npx parcel build "./src/index.html" --dist-dir "./dist" --public-url "./"
+      - name: upload build artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./dist"
+          name: "prod-build-artifact"
+      - name: deploy artifacts
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: "prod-build-artifact"
+          token: "${{github.token}}"
