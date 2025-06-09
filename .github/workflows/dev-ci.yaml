@@ -20,6 +20,8 @@ jobs:
     needs: "dev-pr-job"
     runs-on: ubuntu-latest
     steps:
+      - name: Chekcout Repository To Build
+        uses: actions/checkout@v4 
       - name: Build With Parcel
         run: npx parcel build "./src/index.html" --dist-dir "./dist"
       - name: Wf Summery
